@@ -1,0 +1,58 @@
+{
+  "name": "jsarray/jsarray",
+  "description": "JavaScript-accurate Array wrapper for PHP with immutable operations",
+  "type": "library",
+  "keywords": [
+    "array",
+    "javascript",
+    "immutable",
+    "functional",
+    "collection"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/omer73364/jsarray",
+  "support": {
+    "issues": "https://github.com/omer73364/jsarray/issues",
+    "source": "https://github.com/omer73364/jsarray"
+  },
+  "authors": [
+    {
+      "name": "JsArray Contributors",
+      "email": "contributors@jsarray.dev"
+    }
+  ],
+  "require": {
+    "php": "^8.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9.0|^10.0|^11.0",
+    "vimeo/psalm": "^5.0",
+    "friendsofphp/php-cs-fixer": "^3.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "JsArray\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "JsArray\\Tests\\": "tests/"
+    }
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true,
+  "config": {
+    "sort-packages": true,
+    "optimize-autoloader": true,
+    "allow-plugins": {
+      "php-http/discovery": true
+    }
+  },
+  "scripts": {
+    "test": "phpunit",
+    "test:coverage": "phpunit --coverage-html coverage",
+    "psalm": "psalm",
+    "cs-check": "php-cs-fixer fix --dry-run --diff",
+    "cs-fix": "php-cs-fixer fix"
+  }
+}
