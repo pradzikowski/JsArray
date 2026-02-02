@@ -1,6 +1,12 @@
 # JsArray - JavaScript-accurate Array for PHP
 
+![Packagist Version](https://img.shields.io/packagist/v/jsarray/jsarray)
+![PHP Version](https://img.shields.io/packagist/php-v/jsarray/jsarray)
+![License](https://img.shields.io/github/license/omer73364/jsarray)
+
 A PHP implementation of JavaScript Array methods with immutable operations and identical API behavior.
+
+Bring **JavaScript Array methods** to PHP with **immutable operations** and **identical API behavior**. Chain methods, work with numeric or associative arrays, and write cleaner PHP code with a familiar JS-like style.
 
 ## Installation
 
@@ -212,7 +218,7 @@ echo $modified->toArray();  // [1, 2, 3, 4] (new instance)
 
 ## Requirements
 
-- PHP 8.0+
+- PHP 7.4+
 - Composer
 
 ## License
