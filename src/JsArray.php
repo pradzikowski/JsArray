@@ -31,4 +31,16 @@ class JsArray
         }
         return new self($result);
     }
+
+    public function filter(callable $callback): self
+    {
+        $result = [];
+        foreach ($this->items as $key => $value) {
+            if ($callback($value, $key, $this)) {
+                $result[$key] = $value;
+            }
+        }
+
+        return new self($result);
+    }
 }
