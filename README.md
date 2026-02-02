@@ -216,7 +216,7 @@ echo $modified->toArray();  // [1, 2, 3, 4] (new instance)
 
 ## Requirements
 
-- PHP 7.4+
+- PHP 8.0+
 - Composer
 
 ## License
