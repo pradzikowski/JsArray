@@ -6,8 +6,6 @@
 
 A PHP implementation of JavaScript Array methods with immutable operations and identical API behavior.
 
-Bring **JavaScript Array methods** to PHP with **immutable operations** and **identical API behavior**. Chain methods, work with numeric or associative arrays, and write cleaner PHP code with a familiar JS-like style.
-
 ## Installation
 
 ```bash
