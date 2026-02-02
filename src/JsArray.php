@@ -61,4 +61,19 @@ class JsArray
 
         return $accumulator;
     }
+
+    public function flat(): self
+    {
+        $result = [];
+        foreach ($this->items as $value) {
+            if (is_array($value)) {
+                foreach ($value as $item) {
+                    $result[] = $item;
+                }
+            } else {
+                $result[] = $value;
+            }
+        }
+        return new self($result);
+    }
 }
