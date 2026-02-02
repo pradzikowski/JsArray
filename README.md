@@ -22,20 +22,85 @@ composer require jsarray/jsarray
 ```php
 use JsArray\JsArray;
 
-// Numeric arrays - works just like JavaScript
-$result = JsArray::from([10, 20, 30])
-    ->map(fn($value, $index, $array) => $value * $index)
-    ->filter(fn($value, $index, $array) => $value > 10)
-    ->push(100)
-    ->toArray();
-// [20, 60, 100]
+// Create a new JsArray
+$numbers = JsArray::from([1, 2, 3, 4, 5]);
 
-// Associative arrays - preserves keys
-$result = JsArray::from(['a' => 5, 'b' => 10])
-    ->map(fn($value, $key, $array) => "$key:$value")
-    ->toArray();
-// ['a' => 'a:5', 'b' => 'b:10']
+// Chain methods like in JavaScript
+$result = $numbers
+    ->filter(fn($n) => $n % 2 === 0)  // Keep even numbers
+    ->map(fn($n) => $n * 2)           // Double them
+    ->toArray();                       // Convert back to PHP array
+
+print_r($result); // [4, 8]
 ```
+
+### Working with Objects
+
+```php
+$users = JsArray::from([
+    ['name' => 'John', 'age' => 25],
+    ['name' => 'Jane', 'age' => 30],
+    ['name' => 'Doe', 'age' => 22]
+]);
+
+// Get names of users over 23
+$names = $users
+    ->filter(fn($user) => $user['age'] > 23)
+    ->map(fn($user) => $user['name'])
+    ->toArray();
+
+print_r($names); // ['John', 'Jane']
+```
+
+### More Examples
+
+#### Finding Elements
+```php
+$users = JsArray::from([
+    ['id' => 1, 'name' => 'John'],
+    ['id' => 2, 'name' => 'Jane']
+]);
+
+// Find user by ID
+$user = $users->find(fn($u) => $u['id'] === 2);
+// ['id' => 2, 'name' => 'Jane']
+
+// Check if any user is an admin
+$hasAdmin = $users->some(fn($u) => $u['is_admin'] ?? false);
+// false
+```
+
+#### Array Manipulation
+```php
+$numbers = JsArray::from([1, 2, 3]);
+
+// Add elements
+$newNumbers = $numbers->push(4, 5);
+// [1, 2, 3, 4, 5]
+
+// Get first and last elements
+$first = $numbers->first(); // 1
+$last = $numbers->last();   // 3
+
+// Slice array
+$middle = $numbers->slice(1, 2); // [2, 3]
+```
+
+#### Working with Keys
+```php
+$data = JsArray::from([
+    'a' => 1,
+    'b' => 2,
+    'c' => 3
+]);
+
+// Get all keys
+$keys = $data->keys()->toArray(); // ['a', 'b', 'c']
+
+// Get all values
+$values = $data->values()->toArray(); // [1, 2, 3]
+```
+
 
 ## API Reference
 
