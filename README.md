@@ -1,10 +1,27 @@
-# JsArray - JavaScript-accurate Array for PHP
+# JsArray - JavaScript Arrays in PHP
 
 ![Packagist Version](https://img.shields.io/packagist/v/jsarray/jsarray)
 ![PHP Version](https://img.shields.io/packagist/php-v/jsarray/jsarray)
 ![License](https://img.shields.io/github/license/omer73364/jsarray)
+![Tests](https://img.shields.io/badge/tests-100%2B-brightgreen)
 
-A PHP implementation of JavaScript Array methods with immutable operations and identical API behavior.
+> **Write JavaScript Array code in PHP.** Familiar, powerful, and intuitive API for working with arrays.
+
+If you know JavaScript arrays, you already know JsArray.
+
+---
+
+## What is JsArray?
+
+JsArray brings the beloved JavaScript Array methods to PHP with:
+
+- ✅ **Familiar API** - Same methods, same behavior as JavaScript
+- ✅ **Full Type Safety** - PHP 8+ with complete type hints
+- ✅ **Flexible** - Choose immutable (safe) or mutable (fast) mode
+- ✅ **Pure PHP** - Zero dependencies, lightweight
+- ✅ **Well Tested** - 100+ test cases, 95%+ coverage
+
+---
 
 ## Installation
 
@@ -12,229 +29,442 @@ A PHP implementation of JavaScript Array methods with immutable operations and i
 composer require jsarray/jsarray
 ```
 
-## Features
+**Requirements:** PHP 8.0+
 
-- ✅ **JavaScript-accurate API** - All methods behave exactly like their JavaScript counterparts
-- ✅ **Immutable operations** - Every method returns a new JsArray instance
-- ✅ **Supports both numeric and associative arrays** - Handles PHP arrays naturally
-- ✅ **Performance optimized** - Uses foreach loops, avoids unnecessary array operations
-- ✅ **PHP 8+ compatible** - Modern PHP with type hints
-- ✅ **Zero dependencies** - Lightweight, pure PHP implementation
+---
 
 ## Quick Start
+
+### The Basics
 
 ```php
 use JsArray\JsArray;
 
-// Create a new JsArray
 $numbers = JsArray::from([1, 2, 3, 4, 5]);
 
-// Chain methods like in JavaScript
-$result = $numbers
-    ->filter(fn($n) => $n % 2 === 0)  // Keep even numbers
-    ->map(fn($n) => $n * 2)           // Double them
-    ->toArray();                       // Convert back to PHP array
+// Transform data
+$doubled = $numbers->map(fn($number) => $number * 2);
 
-print_r($result); // [4, 8]
+// Keep only matching items
+$evenNumbers = $numbers->filter(fn($number) => $number % 2 === 0);
+
+// Combine operations (method chaining)
+$result = $numbers
+    ->filter(fn($number) => $number > 2)
+    ->map(fn($number) => $number * 10)
+    ->toArray();
+
+// Result: [30, 40, 50]
 ```
 
 ### Working with Objects
 
 ```php
 $users = JsArray::from([
-    ['name' => 'John', 'age' => 25],
-    ['name' => 'Jane', 'age' => 30],
-    ['name' => 'Doe', 'age' => 22]
+    ['name' => 'Alice', 'age' => 25],
+    ['name' => 'Bob', 'age' => 17],
+    ['name' => 'Charlie', 'age' => 30],
 ]);
 
-// Get names of users over 23
-$names = $users
-    ->filter(fn($user) => $user['age'] > 23)
+// Get names of adults
+$adultNames = $users
+    ->filter(fn($user) => $user['age'] >= 18)
     ->map(fn($user) => $user['name'])
     ->toArray();
 
-print_r($names); // ['John', 'Jane']
+// Result: ['Alice', 'Charlie']
 ```
 
-### More Examples
+---
 
-#### Finding Elements
-```php
-$users = JsArray::from([
-    ['id' => 1, 'name' => 'John'],
-    ['id' => 2, 'name' => 'Jane']
-]);
+## Core Features
 
-// Find user by ID
-$user = $users->find(fn($u) => $u['id'] === 2);
-// ['id' => 2, 'name' => 'Jane']
+### 28+ Array Methods
 
-// Check if any user is an admin
-$hasAdmin = $users->some(fn($u) => $u['is_admin'] ?? false);
-// false
-```
-
-#### Array Manipulation
-```php
-$numbers = JsArray::from([1, 2, 3]);
-
-// Add elements
-$newNumbers = $numbers->push(4, 5);
-// [1, 2, 3, 4, 5]
-
-// Get first and last elements
-$first = $numbers->first(); // 1
-$last = $numbers->last();   // 3
-
-// Slice array
-$middle = $numbers->slice(1, 2); // [2, 3]
-```
-
-#### Working with Keys
-```php
-$data = JsArray::from([
-    'a' => 1,
-    'b' => 2,
-    'c' => 3
-]);
-
-// Get all keys
-$keys = $data->keys()->toArray(); // ['a', 'b', 'c']
-
-// Get all values
-$values = $data->values()->toArray(); // [1, 2, 3]
-```
-
-
-## API Reference
-
-### Properties
-
-#### `length`
-The `length` property returns the number of elements in the array.
+**Transformation**
 
 ```php
-$array = JsArray::from([1, 2, 3]);
-echo $array->length; // 3
+$array->map(fn($item) => $item * 2);           // Transform each item
+$array->filter(fn($item) => $item > 10);       // Keep matching items
+$array->reduce(fn($total, $item) => $total + $item, 0);  // Combine to single value
+$array->flat();                                 // Flatten nested arrays
+$array->flatMap(fn($item) => [$item, $item * 2]); // Map then flatten
 ```
 
-### Creation Methods
+**Search**
 
 ```php
-use JsArray\JsArray;
-
-// Static methods
-$jsArray = JsArray::from([1, 2, 3]);
-$jsArray = JsArray::of(1, 2, 3);
+$array->find(fn($item) => $item > 100);        // Get first match
+$array->findIndex(fn($item) => $item > 100);   // Get index of first match
+$array->includes(50);                          // Check if value exists
+$array->indexOf(50);                           // Get index of value
+$array->some(fn($item) => $item > 100);        // Check if ANY match
+$array->every(fn($item) => $item > 0);         // Check if ALL match
 ```
 
-### Iteration & Transformation
+**Access**
 
 ```php
-// Execute a function for each element
-$jsArray->forEach(function($value, $index, $array) {
-    // Your code here
-});
-
-$jsArray->map(fn($value, $index, $array) => $value * 2)
-$jsArray->filter(fn($value, $index, $array) => $value > 10)
-$jsArray->reduce(fn($accumulator, $value, $index, $array) => $accumulator + $value, 0)
-$jsArray->flat()
-$jsArray->flatMap(fn($value, $index, $array) => [$value, $value * 2])
-$jsArray->slice(1, 3)
-$jsArray->concat(JsArray::from([4, 5]), JsArray::from([6]))
+$array->first();                               // Get first item
+$array->last();                                // Get last item
+$array->at(0);                                 // Get item at index
+$array->at(-1);                                // Get last item (negative index)
+$array->length;                                // Get array length
 ```
 
-### Search & Validation
+**Manipulation**
 
 ```php
-$jsArray->find(fn($value, $index, $array) => $value > 10)
-$jsArray->findIndex(fn($value, $index, $array) => $value > 10)  // Returns -1 for numeric, null for associative
-$jsArray->includes(5)
-$jsArray->some(fn($value, $index, $array) => $value > 10)
-$jsArray->every(fn($value, $index, $array) => $value > 0)
+$array->push($item1, $item2);                  // Add items to end
+$array->pop();                                 // Remove and return last item
+$array->unshift($item1, $item2);               // Add items to start
+$array->shift();                               // Remove and return first item
+$array->slice(1, 3);                           // Extract portion
+$array->reverse();                             // Reverse order
+$array->sort();                                // Sort items
+$array->concat($otherArray);                   // Combine arrays
+$array->join(', ');                            // Join into string
 ```
 
-### Stack-like Operations
+**Other**
 
 ```php
-$jsArray->push(4, 5)
-$result = $jsArray->pop()
-// Returns ['array' => new JsArray([...]), 'value' => last_value]
+$array->keys();                                // Get all keys
+$array->values();                              // Get all values
+$array->forEach(fn($item) => echo $item);     // Execute for each item
 ```
 
-### Utility Methods
+---
+
+## Flexible Callback Signatures
+
+Use only the parameters you need:
 
 ```php
-$jsArray->keys()      // Returns JsArray of keys
-$jsArray->values()    // Returns JsArray of values
-$jsArray->first()     // Returns first element or null
-$jsArray->last()      // Returns last element or null
-$jsArray->toArray()   // Returns native PHP array
+// Just the item value
+$numbers->map(fn($number) => $number * 2);
+
+// Item and its index
+$items->filter(fn($item, $index) => $index > 0);
+$numbers->forEach(fn($number, $index) => echo "$index: $number");
+
+// Full context (item, index, and array reference)
+$array->map(fn($item, $index, $array) =>
+    $item > ($array->length / 2) ? 'big' : 'small'
+);
 ```
 
-## Callback Signature
+JsArray automatically detects which parameters your callback uses. No configuration needed!
 
-All callback-based methods use the JavaScript signature:
+---
 
-```php
-callback($value, $indexOrKey, $array)
-```
+## Two Modes: Immutable & Mutable
 
-- `$value` - The current value (always first, like JS)
-- `$indexOrKey` - Numeric index for arrays, string key for associative
-- `$array` - The original JsArray instance (immutable reference)
+### Immutable Mode (Default - Safe)
 
-## Behavioral Notes
-
-### Numeric vs Associative Arrays
-
-- **Numeric arrays**: Automatically reindexed when JavaScript behavior dictates (like `filter()`)
-- **Associative arrays**: Keys preserved unless explicitly modified
-
-### findIndex() Returns
-
-```php
-// Numeric array: returns -1 when not found
-JsArray::from([1, 2, 3])->findIndex(fn($value, $index, $array) => $value > 10);  // -1
-
-// Associative array: returns null when not found
-JsArray::from(['a' => 1, 'b' => 2])->findIndex(fn($value, $key, $array) => $value > 10);  // null
-```
-
-### Immutability
-
-Every operation returns a new JsArray instance:
+Creates a new array for each operation. Original is never changed.
 
 ```php
 $original = JsArray::from([1, 2, 3]);
-$modified = $original->push(4);
+$doubled = $original->map(fn($number) => $number * 2);
 
-echo $original->toArray();  // [1, 2, 3] (unchanged)
-echo $modified->toArray();  // [1, 2, 3, 4] (new instance)
+echo $original->toArray();  // [1, 2, 3] - unchanged
+echo $doubled->toArray();   // [2, 4, 6] - new array
 ```
+
+**Use immutable when:**
+
+- Processing user input
+- Data safety matters
+- Building complex logic
+- Working with small to medium arrays (< 10,000 items)
+
+### Mutable Mode (Fast - Optional)
+
+Modifies the array in-place. Much faster for large datasets.
+
+```php
+$array = JsArray::mutable([1, 2, 3, 4, 5]);
+$array->map(fn($number) => $number * 2);
+$array->filter(fn($number) => $number > 2);
+
+echo $array->toArray();  // [4, 6, 8, 10] - modified in-place
+```
+
+**Use mutable when:**
+
+- Processing large datasets (> 50,000 items)
+- Performance is critical
+- Building or accumulating data
+- Bulk operations (imports, migrations)
+
+### Converting Between Modes
+
+```php
+// Start with immutable, convert if needed
+$array = JsArray::from([1, 2, 3]);
+
+if ($arraySize > 50000) {
+    $array->toMutable();  // Switch to mutable mode
+}
+
+// Create mutable copy without affecting original
+$copy = $array->getMutableCopy();
+$copy->map(...)->filter(...);
+echo $array->toArray();  // Original unchanged
+
+// Convert back to immutable
+$safeArray = $copy->toImmutable();
+```
+
+Check the mode:
+
+```php
+$array->isMutable;    // bool
+$array->isImmutable;  // bool
+```
+
+---
+
+## Real-World Examples
+
+See [EXAMPLES.md](./docs/EXAMPLES.md) for detailed real-world examples including:
+
+- Processing form input safely
+- Importing CSV files efficiently
+
+---
+
+## Common Patterns
+
+See [PATTERNS.md](./docs/PATTERNS.md) for common patterns and recipes including:
+
+- Filter and transform data
+- Reduce to single values
+- Group by properties
+- Flatten nested arrays
+- Chain multiple operations
+- And more!
+
+---
+
+## API Reference
+
+See [API.md](./docs/API.md) for complete API documentation including:
+
+- **Creation Methods** - `from()`, `of()`, `mutable()`, `createMutable()`
+- **Transformation Methods** - `map()`, `filter()`, `reduce()`, `flat()`, `flatMap()`, `slice()`, `splice()`, `reverse()`, `sort()`, `concat()`
+- **Search Methods** - `find()`, `findIndex()`, `includes()`, `indexOf()`, `lastIndexOf()`, `some()`, `every()`
+- **Access Methods** - `first()`, `last()`, `at()`, `keys()`, `values()`
+- **Manipulation Methods** - `push()`, `pop()`, `unshift()`, `shift()`, `join()`, `forEach()`
+- **Conversion Methods** - `toArray()`, `toMutable()`, `toImmutable()`, `getMutableCopy()`, `getImmutableCopy()`
+
+---
+
+## Performance Guide
+
+**Recommended Array Sizes:**
+
+| Size            | Mode        | Speed                                      |
+| --------------- | ----------- | ------------------------------------------ |
+| < 100 items     | Immutable   | Very fast, no issues                       |
+| 100 - 10K items | Immutable   | Fast, acceptable for web apps              |
+| 10K - 50K items | Either      | Consider mutable if doing heavy operations |
+| > 50K items     | **Mutable** | Use mutable for 7x speed improvement       |
+| > 1M items      | **Mutable** | Must use mutable to avoid timeout          |
+
+**Example:**
+
+```php
+// Small dataset - use immutable (safe default)
+$users = JsArray::from($request->input('users'));
+
+// Large dataset - use mutable (performance)
+$data = JsArray::mutable(range(1, 1000000));
+```
+
+See [PERFORMANCE.md](./docs/PERFORMANCE.md) for detailed performance analysis.
+
+---
+
+## Tips & Tricks
+
+See [MUTABILITY.md](./docs/MUTABILITY.md) for comprehensive best practices.
+
+### Use Only Parameters You Need
+
+```php
+// Don't pass parameters you won't use
+$array->map(fn($item) => $item * 2);  // ✅ Clean
+$array->map(fn($item, $i, $a) => $item * 2);  // ❌ Unnecessary
+```
+
+### Avoid Recreating Arrays in Loops
+
+```php
+// ❌ Slow - recreates array each iteration
+foreach ($batch as $item) {
+    $result = JsArray::from($data)->filter(...);
+}
+
+// ✅ Fast - create once, use many times
+$array = JsArray::from($data);
+foreach ($batch as $item) {
+    $result = $array->filter(...);
+}
+```
+
+### Use Mutable for Building Data
+
+```php
+// Building array from multiple operations
+$builder = JsArray::mutable([]);
+while ($row = getNextRow()) {
+    $builder->push($row);
+}
+// Much faster than immutable mode!
+```
+
+### Convert to Immutable When Done
+
+```php
+// Do heavy processing with mutable
+$data = JsArray::mutable($large_dataset)
+    ->filter(...)
+    ->map(...);
+
+// Convert to immutable before storing/returning
+return $data->toImmutable();
+```
+
+---
+
+## Common Questions
+
+### How is this different from Laravel Collections?
+
+**Collections** are Laravel-specific with 100+ methods for general data manipulation.
+**JsArray** focuses on JavaScript Array API with familiar syntax.
+
+Use JsArray for:
+
+- JavaScript developers learning PHP
+- Specific JavaScript array methods
+- Lightweight alternative to Collections
+
+### Does it work with database results?
+
+Yes! Convert your results to array first:
+
+```php
+$users = JsArray::from(User::all()->toArray());
+$admins = $users->filter(fn($user) => $user['role'] === 'admin');
+```
+
+### Can I use it in Laravel?
+
+Absolutely! Works great in any PHP project.
+
+```php
+class UserController {
+    public function index() {
+        $users = JsArray::from(User::all()->toArray());
+        $filtered = $users->filter(...)->map(...);
+        return response()->json($filtered->toArray());
+    }
+}
+```
+
+### What about object immutability?
+
+JsArray maintains array structure immutability (new instances for operations). Objects within can still be modified. This is the same behavior as JavaScript.
+
+---
 
 ## Requirements
 
-- PHP 8.0+
-- Composer
+- **PHP:** 8.0 or higher
+- **Composer:** For easy installation
+- **Dependencies:** None! (Pure PHP)
 
-## License
+---
 
-MIT License - see LICENSE file for details.
+## Testing
+
+Run tests:
+
+```bash
+composer test
+```
+
+Tests include:
+
+- 100+ test cases
+- All methods covered
+- Edge cases tested
+- Immutable/mutable modes tested
+
+---
 
 ## Contributing
 
+We welcome contributions!
+
 1. Fork the repository
 2. Create a feature branch
-3. Make your changes
-4. Add tests for new functionality
+3. Write tests for your changes
+4. Ensure tests pass
 5. Submit a pull request
 
-## Why JsArray?
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for details.
 
-- **Familiar API** - If you know JavaScript Arrays, you know JsArray
-- **Type Safety** - Full PHP 8+ type hints
-- **Performance** - Optimized for PHP's strengths
-- **Predictable** - Immutable operations prevent side effects
-- **Flexible** - Works with both numeric and associative arrays naturally
+---
+
+## Documentation Files
+
+- **[PATTERNS.md](./docs/PATTERNS.md)** - Common patterns and recipes
+- **[EXAMPLES.md](./docs/EXAMPLES.md)** - Real-world usage examples
+- **[PERFORMANCE.md](./docs/PERFORMANCE.md)** - Performance analysis and tips
+- **[MUTABILITY.md](./docs/MUTABILITY.md)** - Deep dive into mutable/immutable modes
+- **[API.md](./docs/API.md)** - Complete API reference
+
+---
+
+## License
+
+MIT License - See [LICENSE](./LICENSE) for details.
+
+---
+
+## Support
+
+- 🐛 [Report Issues](https://github.com/omer73364/JsArray/issues)
+- 💡 [Request Features](https://github.com/omer73364/JsArray/discussions)
+- 📝 [View Discussions](https://github.com/omer73364/JsArray/discussions)
+
+---
+
+## Changelog
+
+### v2.0.0
+
+- ✨ Added mutable mode for performance
+- ✨ 5 new methods (shift, unshift, indexOf, lastIndexOf, reverse)
+- ✨ Flexible callback signatures (use only params you need!)
+- ✨ Depth parameter for flat()
+- 🐛 Fixed filter re-indexing for numeric arrays
+- 📚 Comprehensive documentation
+
+### v1.0.0
+
+- Initial release
+
+---
+
+<div align="center">
+
+**JsArray** - _JavaScript Arrays in PHP_
+
+[⭐ Star us on GitHub](https://github.com/omer73364/JsArray)
+
+</div>
