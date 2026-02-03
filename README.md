@@ -97,6 +97,67 @@ JsArray automatically detects which parameters your callback uses. No configurat
 
 ---
 
+## Core Features
+
+**Transformation**
+
+```php
+$array->map(fn($item) => $item * 2);           // Transform each item
+$array->filter(fn($item) => $item > 10);       // Keep matching items
+$array->reduce(fn($total, $item) => $total + $item, 0);  // Combine to single value
+$array->flat();                                 // Flatten nested arrays
+$array->flatMap(fn($item) => [$item, $item * 2]); // Map then flatten
+```
+
+**Search**
+
+```php
+$array->find(fn($item) => $item > 100);        // Get first match
+$array->findIndex(fn($item) => $item > 100);   // Get index of first match
+$array->includes(50);                          // Check if value exists
+$array->indexOf(50);                           // Get index of value
+$array->some(fn($item) => $item > 100);        // Check if ANY match
+$array->every(fn($item) => $item > 0);         // Check if ALL match
+```
+
+**Access**
+
+```php
+$array->first();                               // Get first item
+$array->last();                                // Get last item
+$array->at(0);                                 // Get item at index
+$array->at(-1);                                // Get last item (negative index)
+$array->length;                                // Get array length
+```
+
+**Manipulation**
+
+```php
+$array->push($item1, $item2);                  // Add items to end
+$array->pop();                                 // Remove and return last item
+$array->unshift($item1, $item2);               // Add items to start
+$array->shift();                               // Remove and return first item
+$array->slice(1, 3);                           // Extract portion
+$array->reverse();                             // Reverse order
+$array->sort();                                // Sort items
+$array->concat($otherArray);                   // Combine arrays
+$array->join(', ');                            // Join into string
+```
+
+**Other**
+
+```php
+$array->keys();                                // Get all keys
+$array->values();                              // Get all values
+$array->forEach(fn($item) => echo $item);     // Execute for each item
+$array->toImmutable(fn($item) => echo $item);     // Convert array to immutable
+$array->toMutable(fn($item) => echo $item);     // Convert array to mutable
+$array->getMutableCopy(fn($item) => echo $item);     // Create new mutable copy of array
+$array->getImmutableCopy(fn($item) => echo $item);     // Create new immutable copy of array
+```
+
+---
+
 ## Two Modes: Immutable & Mutable
 
 ### Immutable Mode (Default)
