@@ -201,17 +201,15 @@ We welcome contributions!
 4. Ensure tests pass
 5. Submit a pull request
 
-See [CONTRIBUTING.md](./CONTRIBUTING.md) for details.
-
 ---
 
 ## Documentation Files
 
+- **[API.md](./docs/API.md)** - Complete API reference
 - **[PATTERNS.md](./docs/PATTERNS.md)** - Common patterns and recipes
 - **[EXAMPLES.md](./docs/EXAMPLES.md)** - Real-world usage examples
 - **[PERFORMANCE.md](./docs/PERFORMANCE.md)** - Performance analysis and tips
 - **[MUTABILITY.md](./docs/MUTABILITY.md)** - Deep dive into mutable/immutable modes
-- **[API.md](./docs/API.md)** - Complete API reference
 
 ---
 
@@ -224,8 +222,6 @@ MIT License - See [LICENSE](./LICENSE) for details.
 ## Support
 
 - 🐛 [Report Issues](https://github.com/omer73364/JsArray/issues)
-- 💡 [Request Features](https://github.com/omer73364/JsArray/discussions)
-- 📝 [View Discussions](https://github.com/omer73364/JsArray/discussions)
 
 ---
 
