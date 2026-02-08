@@ -19,6 +19,7 @@ JsArray brings the beloved JavaScript Array methods to PHP with:
 - ✅ **Full Type Safety** - PHP 8+ with complete type hints
 - ✅ **Flexible** - Choose immutable (safe) or mutable (fast) mode
 - ✅ **Pure PHP** - Zero dependencies, lightweight
+- ✅ **Native PHP Interoperability** - Behaves like a first-class PHP collection
 
 ---
 
@@ -93,6 +94,83 @@ $array->map(fn($item, $index, $array) =>
 ```
 
 JsArray automatically detects which parameters your callback uses. No configuration needed!
+
+---
+
+## Native PHP Interoperability
+
+JsArray behaves like a **first‑class PHP collection** and integrates naturally with core language features.
+
+### Iteration (Iterator)
+
+Use JsArray directly in `foreach` loops:
+
+```php
+$items = JsArray::from([1, 2, 3]);
+
+foreach ($items as $value) {
+    echo $value;
+}
+```
+
+No conversion needed.
+
+### ArrayAccess
+
+Use JsArray as an array:
+
+```php
+$items = JsArray::from([1, 2, 3]);
+
+echo $items[0]; // 1
+$items[0] = 10;
+echo $items[0]; // 10
+$items->toArray(); // [10, 2, 3]
+```
+
+### Counting (Countable)
+
+Use PHP’s native `count()` function:
+
+```php
+$items = JsArray::from([1, 2, 3]);
+
+echo count($items); // 3
+```
+
+Equivalent to:
+
+```php
+$items->length;
+```
+
+### JSON Serialization (JsonSerializable)
+
+Serialize JsArray cleanly using `json_encode()`:
+
+```php
+$items = JsArray::from([1, 2, 3]);
+
+echo json_encode($items);
+```
+
+Output:
+
+```json
+[1, 2, 3]
+```
+
+### Create a JsArray from a JSON string:
+
+```php
+$json = '[1, 2, 3]';
+$items = JsArray::fromJson($json);
+
+// Now you can use JsArray methods
+$doubled = $items->map(fn($n) => $n * 2);
+```
+
+This makes JsArray ideal for APIs, responses, and data transport without extra mapping.
 
 ---
 
@@ -287,6 +365,16 @@ MIT License - See [LICENSE](./LICENSE) for details.
 ---
 
 ## Changelog
+
+### v2.1.0
+
+##### ✨ Enhanced native PHP interoperability:
+
+- **Iteration (Iterator)**: Seamless `foreach` loop support
+- **ArrayAccess**: Access elements using array syntax (e.g., `$array[0]`)
+- **Counting (Countable)**: Native `count()` function integration
+- **JSON Serialization (JsonSerializable)**: Direct `json_encode()` support
+- **JSON Deserialization**: Create JsArray from JSON strings with `fromJson()`
 
 ### v2.0.0
 

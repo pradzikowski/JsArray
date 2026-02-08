@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace JsArray;
 
+use ArrayAccess;
 use Countable;
-use Iterator;
+use IteratorAggregate;
 use JsonException;
 use JsonSerializable;
 use ReflectionFunction;
@@ -23,7 +26,7 @@ use ReflectionFunction;
  * @property-read int $length The number of elements in the array
  * @property-read bool $isMutable Whether array is in mutable mode
  */
-class JsArray implements Countable, Iterator, JsonSerializable
+class JsArray implements Countable, IteratorAggregate, JsonSerializable, ArrayAccess
 {
     /** @var array<mixed> The internal array storage */
     private array $items;
@@ -974,10 +977,41 @@ class JsArray implements Countable, Iterator, JsonSerializable
         return count($this->items);
     }
 
+    // ===== IteratorAggregate implementation =====
+    public function getIterator(): \ArrayIterator
+    {
+        return new \ArrayIterator($this->items);
+    }
+
     // ===== \JsonSerializable implementation =====
     public function jsonSerialize(): array
     {
         return $this->toArray();
+    }
+
+    // ===== ArrayAccess implementation =====
+    public function offsetExists(mixed $offset): bool
+    {
+        return array_key_exists($offset, $this->items);
+    }
+
+    public function offsetGet(mixed $offset): mixed
+    {
+        return $this->items[$offset] ?? null;
+    }
+
+    public function offsetSet(mixed $offset, mixed $value): void
+    {
+        if ($offset === null) {
+            $this->items[] = $value;
+        } else {
+            $this->items[$offset] = $value;
+        }
+    }
+
+    public function offsetUnset(mixed $offset): void
+    {
+        unset($this->items[$offset]);
     }
 
     /**

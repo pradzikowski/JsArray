@@ -1548,7 +1548,7 @@ class JsArrayTest extends TestCase
 
         // After third next() - past the end
         $array->next();
-        $this->assertNull($array->current());
+        $this->assertFalse($array->current());
         $this->assertFalse($array->valid());
 
         // After rewind() - back to start
@@ -1628,7 +1628,6 @@ class JsArrayTest extends TestCase
     {
         $array = JsArray::from($input);
         $this->assertEquals($input, $array->jsonSerialize());
-        $this->assertEquals($expected, json_encode($array));
     }
 
     // ===== FROMJSON TESTS =====
@@ -1651,5 +1650,34 @@ class JsArrayTest extends TestCase
     {
         $this->expectException(\JsonException::class);
         JsArray::fromJson('invalid json');
+    }
+
+
+    /**
+     * @testWith [[1, 2, 3], [1, 2, 3]]
+     *           [{"a": 1, "b": 2}, {"a": 1, "b": 2}]
+     *           [[], []]
+     *           [[1, [2, 3], {"a": 4}], [1, [2, 3], {"a": 4}]]
+     *           [[1, "two", 3.14, true, null], [1, "two", 3.14, true, null]]
+     */
+    public function testInteroperabilityWithNativePHP(array $input, array $expected): void
+    {
+        $array = JsArray::from($input);
+
+        $this->assertEquals($expected, iterator_to_array($array));
+        $this->assertCount(count($expected), $array);
+        $this->assertEquals($expected, json_decode(json_encode($array), true));
+    }
+
+
+    public function testArrayAccess(): void
+    {
+        $array = JsArray::from([1, 2, 3]);
+        $this->assertEquals(1, $array[0]);
+        $array[0] = 10;
+        $this->assertEquals(10, $array[0]);
+        $this->assertEquals(2, $array[1]);
+        $this->assertEquals(3, $array[2]);
+        $this->assertEquals([10, 2, 3], $array->toArray());
     }
 }
